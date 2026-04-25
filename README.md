@@ -13,10 +13,10 @@ AstraLink 是一款基于分形图论的知识管理系统，采用 Go (Gin) + V
 
 ### 2. 获取代码与配置
 
-克隆仓库到本地：
+克隆仓库到本地(给的是ssh的链接方式，没有的话建议去配置一个)：
 
 ```
-git clone <your-repo-url>
+git clone git@github.com:YN1753/AstraLink.git
 cd AstraLink
 ```
 
