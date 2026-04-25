@@ -1,0 +1,11 @@
+.claude
+.idea
+# 编译器/系统相关
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Docker 相关数据（如果你不想把持久化数据传上去）
+data/
+docker

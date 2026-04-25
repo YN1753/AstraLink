@@ -1,0 +1,47 @@
+version: '1.0.0'
+
+services:
+  # 1. 数据库服务 (Neo4j)
+  neo4j:
+    image: neo4j:5.12-community
+    container_name: AstraLink-Neo4j
+    ports:
+      - "7474:7474"   # 浏览器访问数据库控制台的端口
+      - "7687:7687"   # 后端程序连接数据库的 Bolt 端口
+    environment:
+      - NEO4J_AUTH=neo4j/123456789  # 必须和你 config.yaml 里的密码一致
+    volumes:
+      - ./data/neo4j:/data          # 持久化存储：数据库数据存到根目录 data/neo4j 下
+    networks:
+      - astralink-net
+
+  # 2. 后端服务 (Go)
+  backend:
+    build: ./backend                # 指向 backend 文件夹，寻找里面的 Dockerfile
+    container_name: AstraLink-Backend
+    ports:
+      - "8181:8181"                 # 映射后端端口
+    environment:
+      - NEO4J_URL=bolt://neo4j:7687 # 注入环境变量，覆盖 config 里的 localhost
+    depends_on:
+      - neo4j                       # 告诉 Docker 必须先启动数据库
+    # volumes:
+    #   - ./backend/config.yaml:/app/config.yaml # 挂载配置，方便用户在外面修改 yaml
+    #   - ./backend/data:/app/data     # 挂载后端的本地数据目录
+    networks:
+      - astralink-net
+
+  # 3. 前端服务 (Vue)
+  frontend:
+    build: ./frontend               # 指向 frontend 文件夹
+    container_name: AstraLink-Frontend
+    ports:
+      - "80:80"                     # 用户通过浏览器访问 http://localhost 即可
+    depends_on:
+      - backend                     # 确保后端启动后再启动前端
+    networks:
+      - astralink-net
+
+networks:
+  astralink-net:
+    driver: bridge

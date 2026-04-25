@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:YN1753/AstraLink_Backend.git
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:YN1753/AstraLink-frontend.git
